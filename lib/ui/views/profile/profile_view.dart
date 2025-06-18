@@ -27,7 +27,7 @@ class ProfileView extends StatelessWidget {
                     : null,
                 child: user.photoUrl.isEmpty
                     ? Text(
-                  user.name.substring(0, 1).toUpperCase(),
+                  (user.name.isNotEmpty ? user.name.substring(0, 1).toUpperCase() : '?'),
                   style: const TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
