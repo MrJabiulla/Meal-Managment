@@ -37,9 +37,9 @@ class _HomeViewState extends State<HomeView> {
             );
           }
 
-          // if (!viewModel.isLoggedIn) {
-          //   return const LoginView();
-          // }
+          if (!viewModel.isLoggedIn) {
+            return const LoginView();
+          }
 
           return Scaffold(
             appBar: AppBar(

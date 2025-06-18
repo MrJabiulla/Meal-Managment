@@ -118,45 +118,43 @@ class _LoginViewState extends State<LoginView> {
                           onPressed: viewModel.isLoading
                               ? null
                               : () async {
-                            try {
-                              if (viewModel.errorMessage != null) {
-                                print('Current error message: ${viewModel.errorMessage}');
+                            if (_formKey.currentState!.validate()) {
+                              try {
+
+                                final success = await viewModel.login(
+                                  _emailController.text.trim(),
+                                  _passwordController.text.trim(),
+                                );
+                                print('Login attempt with email: ${_emailController.text}');
+                                print('Login success: $success');
+                                print(viewModel.errorMessage );
+
+                                if (success && mounted) {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) => const HomeView(),
+                                    ),
+                                  );
+                                } else if (mounted) {
+                                  // Show specific feedback about the login failure
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(viewModel.errorMessage ?? 'Login failed. Please check your email and password.'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              } catch (error) {
+                                print('Login error occurred: $error');
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Login error: $error')),
+                                  );
+                                }
                               }
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => const HomeView(),
-                                ),
-                              );
-                              // if (_formKey.currentState!.validate()) {
-                              //   print('Login attempt with email: ${_emailController.text}');
-                              //   final success = await viewModel.login(
-                              //     _emailController.text.trim(), // Added trim to remove any whitespace
-                              //     _passwordController.text,
-                              //   );
-                              //   print('Login success: $success');
-                              //   if (success && mounted) {
-                              //     Navigator.of(context).pushReplacement(
-                              //       MaterialPageRoute(
-                              //         builder: (_) => const HomeView(),
-                              //       ),
-                              //     );
-                              //   } else if (mounted) {
-                              //     // Show specific feedback about the login failure
-                              //     ScaffoldMessenger.of(context).showSnackBar(
-                              //       SnackBar(
-                              //         content: Text(viewModel.errorMessage ?? 'Login failed. Please check your email and password.'),
-                              //         backgroundColor: Colors.red,
-                              //       ),
-                              //     );
-                              //   }
-                              // }
-                            } catch (error) {
-                              print('Login error occurred: $error');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Login error: $error')),
-                              );
                             }
-                          }, child: Text(
+                          },
+                          child: Text(
                             viewModel.isLoading ? 'Logging in...' : 'Login',
                           ),
                         ),
