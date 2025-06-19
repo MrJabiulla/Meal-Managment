@@ -162,6 +162,12 @@ class _RegisterViewState extends State<RegisterView> {
                               ? null
                               : () async {
                             if (_formKey.currentState!.validate()) {
+
+                              print('Name: ${_nameController.text}');
+                              print('Email: ${_emailController.text}');
+                              print('Password: ${_passwordController.text}');
+                              print('Confirm Password: ${_confirmPasswordController.text}');
+
                               final success = await viewModel.register(
                                 _nameController.text,
                                 _emailController.text,
